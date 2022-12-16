@@ -60,7 +60,7 @@ bool H4AW_HTTPHandlerSSE::_execute(){
         c->TX((const uint8_t *) retry.data(),retry.size());
         _cbConnect(_clients.size());
         if(lid){
-            H4AW_PRINT3("It's a reconnect! lid=%d send backlog of %d\n",lid,backlog.size());
+            H4AW_PRINT3("It's a reconnect! lid=%d send backlog of %d\n",lid,_backlog.size());
             for(auto b:_backlog) if(b.first > lid) c->TX((const uint8_t *) b.second.data(),b.second.size());
         } else H4AW_PRINT1("New SSE Client %p\n",c);
     });
