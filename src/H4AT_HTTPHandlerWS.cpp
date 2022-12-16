@@ -40,7 +40,7 @@ For example, other rights such as publicity, privacy, or moral rights may limit 
         return std::string(base64::encode(bentos,20,false).c_str());
     }
 #else
-    #include "esp32/sha.h"
+    #include "sha/sha_parallel_engine.h"
     std::string _HAL_wsEncode(const std::string& k){ 
         uint8_t bentos[20];
         esp_sha(esp_sha_type::SHA1, (const uint8_t*) k.data(),k.size(), bentos);

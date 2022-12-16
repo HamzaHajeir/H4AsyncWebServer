@@ -125,7 +125,7 @@ bool H4AW_HTTPHandler::_serveFile(const char* fn){
     bool rv=false;
     char crlf[]={'0','\r','\n','\r','\n'};
     size_t force_fit=TCP_MSS - 7; // allow chunk embellishment not to overflow "sensible" buf size hex\r\n ... \r\n == 7
-    readFileChunks(fn,force_fit,
+    h4t::readFileChunks(fn,force_fit,
         [&](const uint8_t* data,size_t len){
             std::string hex=stringFromInt(len,"%03x\r\n");
             size_t total=len+hex.size()+2;
@@ -191,11 +191,11 @@ void H4AW_HTTPHandler::send(uint16_t code,const std::string& type,size_t length,
 }
 /*
 void H4AW_HTTPHandler::sendFileParams(const char* fn,H4T_FN_LOOKUP f){
-    sendstring(mimeType(fn), replaceParams(readFile(fn),f));
+    sendstring(mimeType(fn), replaceParams(h4t::readFile(fn),f));
 }
 */
 void H4AW_HTTPHandler::sendFileParams(const char* fn,H4T_NVP_MAP& nvp){
-    sendstring(mimeType(fn), replaceParams(readFile(fn),nvp));
+    sendstring(mimeType(fn), replaceParams(h4t::readFile(fn),nvp));
 }
 //
 // H4AW_HTTPHandlerFile match only verb, treat path as static filename

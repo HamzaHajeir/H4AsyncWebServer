@@ -68,7 +68,7 @@ Any "missing" feature can be added easily enough if you can make a solid case fo
 || Name | Provides | Notes |
 | :---: | :----------  | :--- | :--- |
 |![roadmap](assets/common/h4_icon.jpg)|[H4](https://github.com/philbowles/H4)|Scheduler/Async Timers - core of all multitasking functions| |
-|![roadmap](assets/common/tools_icon.jpg)|[H4Tools](https://github.com/philbowles/H4Tools)|'32/'8266 HAL and utility functions| |
+|![roadmap](assets/common/tools_icon.jpg)|[H4Tools](https://github.com/HamzaHajeir/H4Tools)|'32/'8266 HAL and utility functions| |
 |![roadmap](assets/common/h4async_icon.jpg)|[H4AsyncTCP](https://github.com/philbowles/H4AsyncTCP)| Asynchronous TCP RX/TX| |
 |![roadmap](assets/common/pangolin_icon.jpg)|[H4AsyncMQTT](https://github.com/philbowles/H4AsyncMQTT)| Asynchronous MQTT c/w auto-reconnect and *full* QoS0/1/2 | |
 |![roadmap](assets/common/armadillo_icon.jpg)|[H4AsyncHTTP](https://github.com/philbowles/H4AsyncHTTP)| Asynchronous remote GET / POST etc | |
@@ -245,6 +245,7 @@ uint8_t* bodyData() // address of input request raw body data (if any)
 size_t bodySize() // length of input request raw body data
 H4AW_HTTPRequest* client() // ptr to original request (base is H4AsyncClient) allows access to remoteIP() etc of client
 std::string mimeType(const char* fn); // returns mime type of file / file extention e.g. fn can be "myfile.xyz" or just "xyz"
+H4T_NVP_MAP& req_headers() // name/value pair map of input headers
 H4T_NVP_MAP& params()// name/value pair map of input parameters either from ? query string or POST body
 void redirect(const char* url); // Send HTTP 303 redirect to new url
 // send(...

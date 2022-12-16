@@ -92,6 +92,7 @@ class H4AW_HTTPRequest: public H4AsyncClient {
                 size_t          _blen=0;
                 H4T_NVP_MAP     params;
                 std::string     url;
+                H4T_NVP_MAP     headers;
 
         H4AW_HTTPRequest(tcp_pcb* p): H4AsyncClient(p){ H4AW_PRINT1("H4AW_HTTPRequest CTOR %p\n",this);}
         virtual ~H4AW_HTTPRequest(){ 
@@ -104,6 +105,7 @@ class H4AW_HTTPRequest: public H4AsyncClient {
 // don't call
         static  std::string     _getHeader(H4T_NVP_MAP& m,const char* h);
                 void            _paramsFromstring(const std::string& bod);
+                void            _addHeader(const std::string &h, const std::string &v) { headers[h] = v; }
 };
 
 class H4AW_WebsocketClient: public H4AW_HTTPRequest {
@@ -163,6 +165,7 @@ class H4AW_HTTPHandler {
                 H4AW_HTTPRequest*   client(){ return _r; }
         static  std::string         mimeType(const char* fn);
                 H4T_NVP_MAP&        params(){ return _r->params; }
+                H4T_NVP_MAP&        req_headers(){ return _r->headers; }
                 void                redirect(const char* fn);
         virtual void                send(uint16_t code,const std::string& type,size_t length=0,const void* body=nullptr);
         virtual void                sendFile(const char* fn){ _serveFile(fn); }

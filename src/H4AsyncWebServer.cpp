@@ -71,9 +71,14 @@ void H4AsyncWebServer::route(void* c,const uint8_t* data,size_t len){
     std::vector<std::string> vparts=split(sub[0]," ");
 
     H4T_NVP_MAP _rqHeaders;
-    for(auto &r:std::vector<std::string>(++rqst.begin(),--rqst.end())){
-        std::vector<std::string> rparts=split(r,":");
-        if(rparts.size() > 1) _rqHeaders[uppercase(rparts[0])]=urldecode(trim(rparts[1]));
+    for(auto &req:std::vector<std::string>(++rqst.begin(),--rqst.end())){
+        std::vector<std::string> rparts=split(req,":");
+        if(rparts.size() > 1)
+        {
+            auto trimmed=trim(rparts[1]);
+            _rqHeaders[uppercase(rparts[0])] = urldecode(trimmed);
+            r->_addHeader(rparts[0], trimmed);
+        }
     }
         
 //    for(auto &r:_rqHeaders) Serial.printf("RQ %s=%s\n",r.first.data(),r.second.data());
