@@ -39,7 +39,8 @@ void H4AsyncWebServer::addHandler(H4AW_HTTPHandler* h){
 void H4AsyncWebServer::begin(){
     H4AW_PRINT1("SERVER BEGIN %p\n",this);
     onError([=](int e,int i){ 
-        if(e!=ERR_CLSD) Serial.printf("H4AsyncWebServer ERROR %d %d\n",e,i);
+        H4AT_PRINT1("H4AsyncWebServer ERROR %d %d\n",e,i);
+        // if(e!=ERR_CLSD) Serial.printf("H4AsyncWebServer ERROR %d %d\n",e,i);
         return true;
     });
     H4AsyncClient::_scavenge();

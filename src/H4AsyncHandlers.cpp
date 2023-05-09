@@ -105,7 +105,7 @@ bool H4AW_HTTPHandler::_match(const std::string& verb,const std::string& path){
 }
 
 bool H4AW_HTTPHandler::_notFound(){
-    send(404,mimeType("txt"),5,"oops!");
+    send(404,mimeType("txt"),6,"oops!");
     return true;
 }
 
@@ -141,7 +141,7 @@ bool H4AW_HTTPHandler::_serveFile(const char* fn){
                 _headers["Transfer-Encoding"]="chunked";
                 _headers["Cache-Control"]="max-age="+stringFromInt(_srv->_cacheAge);
                 send(200,mimeType(fn),0,nullptr);
-            } else _notFound();//send(404,"text/plain",5,"oops!");
+            }/*  else _notFound();//send(404,"text/plain",5,"oops!"); */ // 404Handler sends it.
         },
         [&]{
             H4AW_PRINT1("ALL CHUNKED OUT for %s\n",_path.data());
