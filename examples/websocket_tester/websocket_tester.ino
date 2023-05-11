@@ -1,15 +1,13 @@
 #ifdef ARDUINO_ARCH_ESP8266
   #include<ESP8266WiFi.h>
-  #include<LittleFS.h>
-  #define HAL_FS LittleFS
   #define MY_BOARD "Wemos D1 Mini"
 #else
   #include<WiFi.h>
-  #include<FS.h>
-  #include<SPIFFS.h>
-  #define HAL_FS SPIFFS
   #define MY_BOARD "ESP32 Dev Board"
 #endif
+#include<LittleFS.h>
+#define HAL_FS LittleFS
+
 
 #include <H4.h>
 #include<H4AsyncWebServer.h>
@@ -58,7 +56,7 @@ void h4setup(){
   });
   
   _ws->onClose([](H4AW_WebsocketClient* skt){ if(!_ws->size()) h4.cancel(ticker); });
-  s.on("/",HTTP_GET,[](H4AW_HTTPHandler* h){ h->sendFile("index.htm"); });   
+  s.on("/",HTTP_GET,[](H4AW_HTTPHandler* h){ h->sendFile("/index.htm"); });   
   s.addHandler(_ws);  
   s.begin();
 }

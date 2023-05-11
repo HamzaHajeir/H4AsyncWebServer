@@ -1,15 +1,12 @@
 #ifdef ARDUINO_ARCH_ESP8266
   #include<ESP8266WiFi.h>
-  #include<LittleFS.h>
-  #define HAL_FS LittleFS
   #define MY_BOARD "Wemos D1 Mini"
 #else
   #include<WiFi.h>
-  #include<FS.h>
-  #include<SPIFFS.h>
-  #define HAL_FS SPIFFS
   #define MY_BOARD "ESP32 Dev Board"
 #endif
+#include<LittleFS.h>
+#define HAL_FS LittleFS
 
 #include <H4.h>
 H4 h4(115200);
