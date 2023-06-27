@@ -94,7 +94,7 @@ class H4AW_HTTPRequest: public H4AsyncClient {
                 std::string     url;
                 H4T_NVP_MAP     headers;
 
-        H4AW_HTTPRequest(tcp_pcb* p): H4AsyncClient(p){ H4AW_PRINT1("H4AW_HTTPRequest CTOR %p\n",this);}
+        H4AW_HTTPRequest(altcp_pcb* p): H4AsyncClient(p){ H4AW_PRINT1("H4AW_HTTPRequest CTOR %p\n",this);}
         virtual ~H4AW_HTTPRequest(){ 
             H4AW_PRINT1("H4AW_HTTPRequest DTOR %p body=%p\n",this,_body);
             if(_body){
@@ -110,7 +110,7 @@ class H4AW_HTTPRequest: public H4AsyncClient {
 
 class H4AW_WebsocketClient: public H4AW_HTTPRequest {
     public:
-        H4AW_WebsocketClient(tcp_pcb* p): H4AW_HTTPRequest(p){}
+        H4AW_WebsocketClient(altcp_pcb* p): H4AW_HTTPRequest(p){}
         virtual ~H4AW_WebsocketClient(){}
 
                 void            sendBinary(const uint8_t* data,size_t len){ _sendFrame(WS_BINARY,data,len); }
@@ -269,11 +269,12 @@ class H4AsyncWebServer: public H4AsyncServer {
 
                 void            addHandler(H4AW_HTTPHandler* h);
                 void            begin() override;
+                void            setPort(uint16_t port) { _port = port; }
                 void            on(const char* path,int verb,H4AW_RQ_HANDLER f);
 
         virtual void            reset();
 // don't call
-                H4AsyncClient*  _instantiateRequest(struct tcp_pcb* p) override { return reinterpret_cast<H4AsyncClient*>(new H4AW_HTTPRequest(p)); }
+                H4AsyncClient*  _instantiateRequest(struct altcp_pcb* p) override { return reinterpret_cast<H4AsyncClient*>(new H4AW_HTTPRequest(p)); }
                 void            route(void* c,const uint8_t* data,size_t len) override;
 };
 

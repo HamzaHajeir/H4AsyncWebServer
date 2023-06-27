@@ -40,7 +40,6 @@ void H4AsyncWebServer::begin(){
     H4AW_PRINT1("SERVER BEGIN %p\n",this);
     onError([=](int e,int i){ 
         H4AT_PRINT1("H4AsyncWebServer ERROR %d %d\n",e,i);
-        // if(e!=ERR_CLSD) Serial.printf("H4AsyncWebServer ERROR %d %d\n",e,i);
         return true;
     });
     H4AsyncClient::_scavenge();
@@ -52,6 +51,7 @@ void H4AsyncWebServer::begin(){
 void H4AsyncWebServer::on(const char* path,int verb,H4AW_RQ_HANDLER f){ addHandler(new H4AW_HTTPHandler{verb,path,f}); }
 
 void H4AsyncWebServer::reset(){
+    H4AsyncServer::reset();
     H4AW_PRINT1("H4AsyncWebServer::reset()\n");
     for(auto &h:_handlers){
         H4AW_PRINT1("reset handler %s %s\n",h->_verbName().data(),h->_path.data());
@@ -67,6 +67,10 @@ void H4AsyncWebServer::route(void* c,const uint8_t* data,size_t len){
 
     std::vector<std::string> rqst=split(std::string((const char*)data,len),"\r\n");
     H4AW_PRINT1("%p ROUTE %s data=%p len=%d\n",r,rqst[0].data(),data,len);
+    if (rqst[0].find("HTTP/1.1") == std::string::npos || split(rqst[0], " ").size() < 3) { // bad input, might filter further
+        H4AW_PRINT1("Corrupted request rqst[0]=%s\n", rqst[0].c_str());
+        return;
+    }
     std::vector<std::string> sub=split(replaceAll(rqst[0],"HTTP/1.1",""),"?");
     if(sub.size() > 1) r->_paramsFromstring(sub[1]);
     std::vector<std::string> vparts=split(sub[0]," ");
