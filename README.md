@@ -7,6 +7,10 @@
 Includes robust and *fast* implementations of websockets and server-sent events (SSE)
 
 ---
+## Version 0.0.3 27/6/2023
+Fix multiple bugs.
+Adds the ability for the user to fetch request headers.
+Adds TLS support
 
 ## Version 0.0.1 19/10/2021 - SHOULD BE CONSIDERED ALPHA
 
