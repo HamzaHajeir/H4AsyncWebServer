@@ -178,16 +178,20 @@ class H4AW_HTTPHandler {
         virtual void                _init(H4AsyncWebServer* srv){ _srv=srv; }
         virtual void                _reset();
                 bool                _select(H4AW_HTTPRequest* r,const std::string& verb,const std::string& path);
-                bool                _serveFile(const char* fn);
+        virtual bool                _serveFile(const char* fn);
                 std::string         _verbName();
 };
 
 class H4AW_HTTPHandlerFile: public H4AW_HTTPHandler {
+                std::string _servePath;
     protected:
         virtual bool    _execute() override { return _serveFile(_path.data()); }
         virtual bool    _match(const std::string& verb,const std::string& path) override;
+        virtual bool    _serveFile(const char* fn) { std::string full_path = _servePath + fn;
+                                                        return H4AW_HTTPHandler::_serveFile(full_path.c_str());}
     public:
-        H4AW_HTTPHandlerFile(): H4AW_HTTPHandler(HTTP_GET,"*"){};
+        /* servePath should start with forward slash "/" */
+        H4AW_HTTPHandlerFile(const std::string& servePath = ""): H4AW_HTTPHandler(HTTP_GET, std::string("*")), _servePath(servePath){};
 //      don't call
         virtual void    _reset() override { _path="*"; } // not REALLY needed
 };
@@ -260,6 +264,7 @@ using H4AW_HANDLER_LIST  = std::vector<H4AW_HTTPHandler*>;
 
 class H4AsyncWebServer: public H4AsyncServer {
         static  void                _scavenge();
+                std::string         _FSPath;
     public:
             size_t                  _cacheAge;
             H4AW_HANDLER_LIST       _handlers;
@@ -267,6 +272,7 @@ class H4AsyncWebServer: public H4AsyncServer {
         H4AsyncWebServer(uint16_t port,size_t cacheAge=H4AW_CACHE_AGE): _cacheAge(cacheAge),H4AsyncServer(port){}
         virtual ~H4AsyncWebServer(){}
 
+                void            setFSPath(const std::string & FSPath) { _FSPath = FSPath; }; /* Should start with forward slash "/" */
                 void            addHandler(H4AW_HTTPHandler* h);
                 void            begin() override;
                 void            setPort(uint16_t port) { _port = port; }

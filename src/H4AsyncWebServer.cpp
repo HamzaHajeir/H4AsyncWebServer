@@ -43,7 +43,7 @@ void H4AsyncWebServer::begin(){
         return true;
     });
     H4AsyncClient::_scavenge();
-    addHandler(new H4AW_HTTPHandlerFile);
+    addHandler(new H4AW_HTTPHandlerFile(_FSPath));
     addHandler(new H4AW_HTTPHandler404);
     H4AsyncServer::begin();
 }
