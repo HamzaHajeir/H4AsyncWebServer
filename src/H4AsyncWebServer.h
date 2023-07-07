@@ -191,7 +191,7 @@ class H4AW_HTTPHandlerFile: public H4AW_HTTPHandler {
                                                         return H4AW_HTTPHandler::_serveFile(full_path.c_str());}
     public:
         /* servePath should start with forward slash "/" */
-        H4AW_HTTPHandlerFile(const std::string& servePath = ""): H4AW_HTTPHandler(HTTP_GET, std::string("*")), _servePath(servePath){};
+        H4AW_HTTPHandlerFile(const std::string& servePath = ""): H4AW_HTTPHandler(HTTP_GET, "*"), _servePath(servePath){};
 //      don't call
         virtual void    _reset() override { _path="*"; } // not REALLY needed
 };

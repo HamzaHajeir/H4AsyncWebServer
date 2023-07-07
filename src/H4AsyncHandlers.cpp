@@ -185,7 +185,8 @@ void H4AW_HTTPHandler::send(uint16_t code,const std::string& type,size_t length,
     if(buff){
         memcpy(buff,status.data(),h);
         if(length) memcpy(buff+h,_body,length);
-        _r->TX(buff,total);
+        if (_r->connected())
+            _r->TX(buff,total);
         free(buff);
     } else Serial.printf("AAAAAAAAARGH H4AW_HTTPHandler::send zero buff\n");
 }

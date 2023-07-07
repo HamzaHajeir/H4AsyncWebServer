@@ -62,7 +62,8 @@ void H4AW_WebsocketClient::_sendFrame(uint8_t opcode,const uint8_t* data,uint16_
         *p++=(len & 0xff);
     }
     memcpy(p,data,len);
-    TX(frame,fs);
+    if (connected())
+        TX(frame,fs);
     free(frame);
 }
 //
