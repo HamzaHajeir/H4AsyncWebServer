@@ -42,7 +42,6 @@ void H4AsyncWebServer::begin(){
         H4AT_PRINT1("H4AsyncWebServer ERROR %d %d\n",e,i);
         return true;
     });
-    H4AsyncClient::_scavenge();
     addHandler(new H4AW_HTTPHandlerFile(_FSPath));
     addHandler(new H4AW_HTTPHandler404);
     H4AsyncServer::begin();

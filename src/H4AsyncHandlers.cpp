@@ -124,7 +124,7 @@ bool H4AW_HTTPHandler::_serveFile(const char* fn){
     H4AW_PRINT2("Serve file %s\n",fn);
     bool rv=false;
     char crlf[]={'0','\r','\n','\r','\n'};
-    size_t force_fit=TCP_MSS - 7; // allow chunk embellishment not to overflow "sensible" buf size hex\r\n ... \r\n == 7
+    size_t force_fit=TCP_MSS - 7 - _r->getTLSOverhead(); // allow chunk embellishment not to overflow "sensible" buf size hex\r\n ... \r\n == 7
     h4t::readFileChunks(fn,force_fit,
         [&](const uint8_t* data,size_t len){
             std::string hex=stringFromInt(len,"%03x\r\n");
