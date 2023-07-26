@@ -7,7 +7,9 @@
 Includes robust and *fast* implementations of websockets and server-sent events (SSE)
 
 ---
+
 ## Version 0.0.3 27/6/2023
+
 Fix multiple bugs.
 Adds the ability for the user to fetch request headers.
 Adds TLS support
@@ -45,7 +47,7 @@ It's an asynchronous webserver for ESP8266 and ESP32 supporting websockets and S
 
 ***H4AsyncWebServer is NOT a "drop-in" replacement for ESPAsyncWebServer***
 
-It is almost impossible to discuss `H4AsyncWebServer` without reference to the `ESPAsyncWebServer` library: `H4AsyncWebServer` only exists because of the serious bugs, faulty / broken implementations of SSE, websockets and nigh-on total lack of support in `ESPAsyncWebServer`. 
+It is almost impossible to discuss `H4AsyncWebServer` without reference to the `ESPAsyncWebServer` library: `H4AsyncWebServer` only exists because of the serious bugs, faulty / broken implementations of SSE, websockets and nigh-on total lack of support in `ESPAsyncWebServer`.
 
 `H4AsyncWebServer` was written specifically to avoid these long-standing unresolved major issues in `ESPAsyncWebServer`. They are issues that contribute to the instability of any ESP app using it and its subsequent total lack of suitability for use in robust apps.
 
@@ -102,7 +104,7 @@ Soon* all H4 libraries will use the [H4 Installer](https://github.com/philbowles
 
 ...Until that's ready, install this library manually by downloading the zip file and using the ArduinoIDE to "add zip library". (Luckily, it has no extra tasks that would require the full H4 installer)
 
-* = Don't ask :) 
+\* = Don't ask :)
 
 ---
 
@@ -284,6 +286,7 @@ H4AT_NVP_MAP nvp={
     ...
 };
 ```
+
 ## H4AW_HTTPHandlerWS (websocket) API
 
 This is not a full implementation: sub-protocols are not supported
@@ -360,7 +363,7 @@ Since all clients gets the same events, the server only needs to know if it has 
 
 ---
 
-(c) 2021 Phil Bowles h4plugins@gmail.com
+(c) 2021 Phil Bowles <h4plugins@gmail.com>
 
 * [Support me on Patreon](https://patreon.com/esparto)
 * [Youtube channel (instructional videos)](https://www.youtube.com/channel/UCYi-Ko76_3p9hBUtleZRY6g)
