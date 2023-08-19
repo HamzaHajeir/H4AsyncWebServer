@@ -31,7 +31,7 @@ For example, other rights such as publicity, privacy, or moral rights may limit 
 */
 #include<H4AsyncWebServer.h>
 
-H4AW_HTTPHandlerSSE::H4AW_HTTPHandlerSSE(const std::string& url, size_t backlog): _bs(backlog),H4AW_HTTPHandler(HTTP_GET,url) { 
+H4AW_HTTPHandlerSSE::H4AW_HTTPHandlerSSE(const std::string& url, size_t backlog, bool auth): _bs(backlog),H4AW_HTTPHandler(HTTP_GET,url,auth) { 
     H4AW_PRINT1("SSE HANDLER CTOR %p backlog=%d\n",this,_bs);
     _reset();
 }

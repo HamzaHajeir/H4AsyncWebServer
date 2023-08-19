@@ -105,7 +105,7 @@ bool H4AW_HTTPHandler::_match(const std::string& verb,const std::string& path){
 }
 
 bool H4AW_HTTPHandler::_notFound(){
-    send(404,mimeType("txt"),6,"oops!");
+    send(404,mimeType("txt"),5,"oops!");
     return true;
 }
 
@@ -114,9 +114,17 @@ bool H4AW_HTTPHandler::_select(H4AW_HTTPRequest* r,const std::string& verb,const
     _r->url=urldecode(path);
     H4AW_PRINT1("Handler select rq=%p url=%s  v=%s[%s] p=%s[%s]\n",_r,_r->url.data(),_verbName().data(),verb.data(),_path.data(),path.data());
     if(_match(verb,path)){
-        bool rv=_execute();
-        _reset();
-        return rv;
+        bool ok = true;
+        if (_authenticate && _srv->_auth) {
+            ok = _srv->_auth->authenticate(this);
+            H4AW_PRINT1("Authentication %s\n", ok?"Succeeded" : "Failed");
+        }
+        if (ok) {
+            bool rv=_execute();
+            _reset();
+            return rv;
+        }
+        return true; // IS Handled by the authenticator.
     } else return false;
 }
 

@@ -129,9 +129,40 @@ void H4AW_WebsocketClient::sendText(const char* fmt, Args&&... args){ // variadi
     free(buff);
 }
 //
-//   H4AW_HTTPHandler + derivatives
+//  H4AW_Authenticator + derivatives
 //
 class H4AW_HTTPHandler;
+class H4AW_Authenticator {
+    virtual void requestAuthentication(H4AW_HTTPHandler*) = 0;
+protected:
+    std::string username;
+    std::string password;
+    std::string realm;
+    H4AW_Authenticator(const std::string& username, const std::string& password, const std::string& realm="h4asyncws") : username(username), password(password), realm(realm) {}
+    virtual ~H4AW_Authenticator() = default;
+    H4AW_Authenticator(const H4AW_Authenticator& other) = default;
+    H4AW_Authenticator& operator=(const H4AW_Authenticator& other) = default;
+    H4AW_Authenticator(H4AW_Authenticator&& other) = default;
+    H4AW_Authenticator& operator=(H4AW_Authenticator&& other) = default;
+
+public:
+    virtual bool authenticate(H4AW_HTTPHandler*) = 0;
+    virtual void changeAuth(const std::string& username, const std::string& password) {
+        this->username = username;
+        this->password = password;
+    }
+};
+
+class H4AW_BasicAuthenticator : public H4AW_Authenticator 
+{
+    void requestAuthentication(H4AW_HTTPHandler* handler) override;
+public:
+    H4AW_BasicAuthenticator(const std::string& username, const std::string& password, const std::string& realm="h4asyncws") : H4AW_Authenticator(username,password,realm) {}
+    bool authenticate(H4AW_HTTPHandler* handler) override;
+};
+//
+//   H4AW_HTTPHandler + derivatives
+//
 using H4AW_RQ_HANDLER    =std::function<void(H4AW_HTTPHandler*)>;
 
 class H4AW_HTTPHandler {
@@ -148,11 +179,12 @@ class H4AW_HTTPHandler {
                 H4AW_HTTPRequest*   _r=nullptr;
                 H4T_NVP_MAP         _sniffHeader; // thinl: tidy??
                 H4AsyncWebServer*   _srv;
+                bool                _authenticate=true;
                 int                 _verb;
 
         static  H4T_NVP_MAP         mimeTypes;
 
-        H4AW_HTTPHandler(int verb,const std::string& path,H4AW_RQ_HANDLER f=nullptr): _verb(verb),_path(path),_f(f){
+        H4AW_HTTPHandler(int verb,const std::string& path,bool authenticate=true,H4AW_RQ_HANDLER f=nullptr): _verb(verb),_path(path),_f(f),_authenticate(authenticate){
             H4AW_PRINT1("H4AW_HTTPHandler CTOR %p v=%d vn=%s p=%s\n",this,_verb,_verbName().data(),path.data());
         }
         virtual ~H4AW_HTTPHandler(){ 
@@ -191,7 +223,7 @@ class H4AW_HTTPHandlerFile: public H4AW_HTTPHandler {
                                                         return H4AW_HTTPHandler::_serveFile(full_path.c_str());}
     public:
         /* servePath should start with forward slash "/" */
-        H4AW_HTTPHandlerFile(const std::string& servePath = ""): H4AW_HTTPHandler(HTTP_GET, "*"), _servePath(servePath){};
+        H4AW_HTTPHandlerFile(const std::string& servePath = "", bool authenticate=true): H4AW_HTTPHandler(HTTP_GET, "*", authenticate), _servePath(servePath){};
 //      don't call
         virtual void    _reset() override { _path="*"; } // not REALLY needed
 };
@@ -216,7 +248,7 @@ class H4AW_HTTPHandlerSSE: public H4AW_HTTPHandler {
     protected:
         virtual bool                _execute() override;
     public:
-        H4AW_HTTPHandlerSSE(const std::string& url,size_t backlog=0);
+        H4AW_HTTPHandlerSSE(const std::string& url,size_t backlog=0,bool authenticate=true);
         ~H4AW_HTTPHandlerSSE();
 
                 void                onChange(H4AW_EVT_HANDLER cb){ _cbConnect=cb; }
@@ -243,7 +275,7 @@ class H4AW_HTTPHandlerWS: public H4AW_HTTPHandler {
         virtual bool                 _execute() override;
     public:
 
-        H4AW_HTTPHandlerWS(const std::string& url);
+        H4AW_HTTPHandlerWS(const std::string& url, bool authenticate=true);
         ~H4AW_HTTPHandlerWS();
 
                 void                broadcastBinary(const uint8_t* data,size_t len);
@@ -266,6 +298,7 @@ class H4AsyncWebServer: public H4AsyncServer {
         static  void                _scavenge();
                 std::string         _FSPath;
     public:
+            H4AW_Authenticator*     _auth=nullptr;
             size_t                  _cacheAge;
             H4AW_HANDLER_LIST       _handlers;
 
@@ -275,8 +308,9 @@ class H4AsyncWebServer: public H4AsyncServer {
                 void            setFSPath(const std::string & FSPath) { _FSPath = FSPath; }; /* Should start with forward slash "/" */
                 void            addHandler(H4AW_HTTPHandler* h);
                 void            begin() override;
+                void            setAuthenticator(H4AW_Authenticator* auth) { _auth = auth; }
                 void            setPort(uint16_t port) { _port = port; }
-                void            on(const char* path,int verb,H4AW_RQ_HANDLER f);
+                void            on(const char* path,int verb,H4AW_RQ_HANDLER f,bool authenticate=true);
 
         virtual void            reset();
 // don't call

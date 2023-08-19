@@ -69,7 +69,7 @@ void H4AW_WebsocketClient::_sendFrame(uint8_t opcode,const uint8_t* data,uint16_
 //
 //      H4AW_HTTPHandlerWS
 //
-H4AW_HTTPHandlerWS::H4AW_HTTPHandlerWS(const std::string& url): H4AW_HTTPHandler(HTTP_GET,url) { _reset(); }
+H4AW_HTTPHandlerWS::H4AW_HTTPHandlerWS(const std::string& url, bool auth): H4AW_HTTPHandler(HTTP_GET,url,auth) { _reset(); }
 
 H4AW_HTTPHandlerWS::~H4AW_HTTPHandlerWS(){ H4AW_PRINT1("WS HANDLER DTOR %p\n",this); }
 

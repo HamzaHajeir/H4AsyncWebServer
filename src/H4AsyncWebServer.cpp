@@ -42,12 +42,12 @@ void H4AsyncWebServer::begin(){
         H4AT_PRINT1("H4AsyncWebServer ERROR %d %d\n",e,i);
         return true;
     });
-    addHandler(new H4AW_HTTPHandlerFile(_FSPath));
+    addHandler(new H4AW_HTTPHandlerFile(_FSPath, _auth));
     addHandler(new H4AW_HTTPHandler404);
     H4AsyncServer::begin();
 }
 
-void H4AsyncWebServer::on(const char* path,int verb,H4AW_RQ_HANDLER f){ addHandler(new H4AW_HTTPHandler{verb,path,f}); }
+void H4AsyncWebServer::on(const char* path,int verb,H4AW_RQ_HANDLER f,bool authenticate=true){ addHandler(new H4AW_HTTPHandler{verb,path,authenticate,f}); }
 
 void H4AsyncWebServer::reset(){
     H4AsyncServer::reset();
