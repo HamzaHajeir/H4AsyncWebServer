@@ -47,7 +47,7 @@ void H4AsyncWebServer::begin(){
     H4AsyncServer::begin();
 }
 
-void H4AsyncWebServer::on(const char* path,int verb,H4AW_RQ_HANDLER f,bool authenticate=true){ addHandler(new H4AW_HTTPHandler{verb,path,authenticate,f}); }
+void H4AsyncWebServer::on(const char* path,int verb,H4AW_RQ_HANDLER f,bool authenticate){ addHandler(new H4AW_HTTPHandler{verb,path,authenticate,f}); }
 
 void H4AsyncWebServer::reset(){
     H4AsyncServer::reset();
