@@ -281,6 +281,7 @@ class H4AW_HTTPHandlerWS: public H4AW_HTTPHandler {
                 void                broadcastBinary(const uint8_t* data,size_t len);
                 template<typename... Args>
                 void                broadcastText(const char* fmt, Args... args){ for(auto const& c:_clients) c->sendText(fmt, args...); }
+                void                broadcastText(const std::string& msg){ for(auto const& c:_clients) c->sendText(msg); }
                 void                onBinaryMessage(H4AW_FN_WSBIN cb){ _cbBin=cb; }
                 void                onClose(H4AW_FN_WSEVENT cb){ _cbClose=cb; }
                 void                onOpen(H4AW_FN_WSEVENT cb){ _cbOpen=cb; }
