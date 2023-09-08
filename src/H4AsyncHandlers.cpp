@@ -112,7 +112,7 @@ bool H4AW_HTTPHandler::_notFound(){
 bool H4AW_HTTPHandler::_select(H4AW_HTTPRequest* r,const std::string& verb,const std::string& path){
     _r=r;
     _r->url=urldecode(path);
-    H4AW_PRINT1("Handler select rq=%p url=%s  v=%s[%s] p=%s[%s]\n",_r,_r->url.data(),_verbName().data(),verb.data(),_path.data(),path.data());
+    H4AW_PRINT2("Handler select rq=%p url=%s  v=%s[%s] p=%s[%s]\n",_r,_r->url.data(),_verbName().data(),verb.data(),_path.data(),path.data());
     if(_match(verb,path)){
         bool ok = true;
         if (_authenticate && _srv->_auth) {

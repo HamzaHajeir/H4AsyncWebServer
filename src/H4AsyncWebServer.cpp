@@ -53,7 +53,7 @@ void H4AsyncWebServer::reset(){
     H4AsyncServer::reset();
     H4AW_PRINT1("H4AsyncWebServer::reset()\n");
     for(auto &h:_handlers){
-        H4AW_PRINT1("reset handler %s %s\n",h->_verbName().data(),h->_path.data());
+        H4AW_PRINT2("reset handler %s %s\n",h->_verbName().data(),h->_path.data());
         h->_reset();
         delete h;
     }
@@ -96,6 +96,7 @@ void H4AsyncWebServer::route(void* c,const uint8_t* data,size_t len){
         else Serial.printf("received weird type %s\n",r->_getHeader(_rqHeaders,"Content-type").data());
     }
     //
+    H4AW_PRINT1("Handling %p %s %s\n", r, vparts[0].data(), vparts[1].data());
     for(auto h:_handlers){
         for(auto &s:h->_sniffHeader) if(_rqHeaders.count(uppercase(s.first))) h->_sniffHeader[s.first]=_rqHeaders[uppercase(s.first)];
         if(h->_select(r,vparts[0],vparts[1])) break;
