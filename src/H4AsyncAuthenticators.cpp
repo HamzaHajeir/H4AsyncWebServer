@@ -1,5 +1,3 @@
-#pragma once
-
 #include "H4AsyncWebServer.h"
 #include "libb64/cdecode.h"
 

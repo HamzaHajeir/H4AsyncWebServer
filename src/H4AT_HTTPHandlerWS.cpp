@@ -78,7 +78,7 @@ bool H4AW_HTTPHandlerWS::_execute(){
     auto c=reinterpret_cast<H4AW_WebsocketClient*>(_r);
     _clients.insert(c);
     if(_cbOpen) _cbOpen(c);
-    c->onDisconnect([=](){
+    c->onDisconnect([c,this](){
         _clients.erase(c);
         if(_cbClose) _cbClose(c);
         if(!_clients.size()) {
@@ -86,13 +86,13 @@ bool H4AW_HTTPHandlerWS::_execute(){
             _reset();
         }
     });
-    c->onRX([=](const uint8_t* data,size_t len){ _socketMessage(c,data,len); });
+    c->onRX([c, this](const uint8_t* data,size_t len){ _socketMessage(c,data,len); });
     auto k=_sniffHeader[txtSecWebsocketKey()].append("258EAFA5-E914-47DA-95CA-C5AB0DC85B11");
     _headers["Sec-WebSocket-Accept"]=_HAL_wsEncode(k);
     _headers["Upgrade"]="websocket";
     _headers["Connection"]="Upgrade";
     H4AW_HTTPHandler::send(101,mimeType("txt")); // mimetype this
-    h4.every((H4AS_SCAVENGE_FREQ * 2) / 3,[=]{ for(auto const& c:_clients) c->_sendFrame(WS_PING); },nullptr,H4AS_WS_KA_ID,true);
+    h4.every((H4AS_SCAVENGE_FREQ * 2) / 3,[c, this]{ for(auto const& c:_clients) c->_sendFrame(WS_PING); },nullptr,H4AS_WS_KA_ID,true);
     return true;
 }
 

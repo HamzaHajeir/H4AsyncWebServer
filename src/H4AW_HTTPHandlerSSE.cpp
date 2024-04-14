@@ -41,7 +41,7 @@ H4AW_HTTPHandlerSSE::~H4AW_HTTPHandlerSSE(){ H4AW_PRINT1("SSE HANDLER DTOR %p\n"
 bool H4AW_HTTPHandlerSSE::_execute(){
     _clients.insert(_r);
     auto c=_r;
-    c->onDisconnect([=](){
+    c->onDisconnect([=, this](){
         _clients.erase(c);
         if(!_clients.size()) {
             h4.cancelSingleton(H4AS_SSE_KA_ID); // needed ?
@@ -53,7 +53,7 @@ bool H4AW_HTTPHandlerSSE::_execute(){
     _headers["Cache-Control"]="no-cache";
     H4AW_HTTPHandler::send(200,"text/event-stream",0,nullptr); // explicitly send zero!
     auto lid=atoi(_sniffHeader["last-event-id"].data());
-    h4.queueFunction([=]{ 
+    h4.queueFunction([=, this]{ 
         H4AW_PRINT1("SSE CLIENT %p\n",c);
         std::string retry("retry: ");
         retry.append(stringFromInt(H4AS_SCAVENGE_FREQ)).append("\n\n");
@@ -66,7 +66,7 @@ bool H4AW_HTTPHandlerSSE::_execute(){
             for(auto b:_backlog) if(b.first > lid) if (tcpConnected) c->TX((const uint8_t *) b.second.data(),b.second.size());
         } else H4AW_PRINT1("New SSE Client %p\n",c);
     });
-    h4.every((H4AS_SCAVENGE_FREQ * 2) / 3,[=]{ send(":"); },nullptr,H4AS_SSE_KA_ID,true); // name it
+    h4.every((H4AS_SCAVENGE_FREQ * 2) / 3,[this]{ send(":"); },nullptr,H4AS_SSE_KA_ID,true); // name it
     return true;
 }
 
