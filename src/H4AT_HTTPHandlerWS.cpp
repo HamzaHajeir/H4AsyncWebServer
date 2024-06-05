@@ -31,8 +31,9 @@ For example, other rights such as publicity, privacy, or moral rights may limit 
 */
 #include<H4ASyncWebServer.h>
 #include <base64.h>
+#include <Arduino.h>
 
-#ifdef ARDUINO_ARCH_ESP8266
+#if defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_RP2040)
     #include <Hash.h>
     std::string _HAL_wsEncode(const std::string& k){
         uint8_t bentos[20];
