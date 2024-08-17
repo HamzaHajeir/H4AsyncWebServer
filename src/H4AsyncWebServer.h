@@ -34,13 +34,15 @@ For example, other rights such as publicity, privacy, or moral rights may limit 
 #include<H4AsyncTCP.h>
 #include"h4asws_config.h"
 
+#define _H4AW_PRINTF(...) _H4T_PRINTF(__VA_ARGS__)
 #if H4AW_DEBUG
+    #define H4AW_PRINTF(...) _H4AW_PRINTF(__VA_ARGS__)
     template<int I, typename... Args>
     void H4AW_PRINT(const char* fmt, Args... args) {
         #ifdef ARDUINO_ARCH_ESP32
-        if (H4AW_DEBUG >= I) Serial.printf(std::string(std::string("H4AS:%d: H=%u M=%u S=%u ")+fmt).c_str(),I,_HAL_freeHeap(),_HAL_maxHeapBlock(),uxTaskGetStackHighWaterMark(NULL),args...);
+        if (H4AW_DEBUG >= I) H4AW_PRINTF(std::string(std::string("H4AS:%d: H=%u M=%u S=%u ")+fmt).c_str(),I,_HAL_freeHeap(),_HAL_maxHeapBlock(),uxTaskGetStackHighWaterMark(NULL),args...);
         #else
-        if (H4AW_DEBUG >= I) Serial.printf(std::string(std::string("H4AS:%d: H=%u M=%u ")+fmt).c_str(),I,_HAL_freeHeap(),_HAL_maxHeapBlock(),args...);
+        if (H4AW_DEBUG >= I) H4AW_PRINTF(std::string(std::string("H4AS:%d: H=%u M=%u ")+fmt).c_str(),I,_HAL_freeHeap(),_HAL_maxHeapBlock(),args...);
         #endif
     }
     #define H4AW_PRINT1(...) H4AW_PRINT<1>(__VA_ARGS__)
@@ -55,6 +57,7 @@ For example, other rights such as publicity, privacy, or moral rights may limit 
     #define H4AW_DUMP3(p,l) H4AW_DUMP<3>((p),l)
     #define H4AW_DUMP4(p,l) H4AW_DUMP<4>((p),l)
 #else
+    #define H4AW_PRINTF(...)
     #define H4AW_PRINT1(...)
     #define H4AW_PRINT2(...)
     #define H4AW_PRINT3(...)
@@ -288,7 +291,7 @@ class H4AW_HTTPHandlerWS: public H4AW_HTTPHandler {
                 void                onTextMessage(H4AW_FN_WSTXT cb){ _cbTxt=cb; }
                 size_t              size(){ return _clients.size(); }
 //
-                void                dumpClients(){ for(auto const& c:_clients) Serial.printf("   WS CLIENT %p\n",c); }
+                void                dumpClients(){ for(auto const& c:_clients) _H4AW_PRINTF("   WS CLIENT %p\n",c); }
 // just dont...
         virtual void                _reset() override;
 };

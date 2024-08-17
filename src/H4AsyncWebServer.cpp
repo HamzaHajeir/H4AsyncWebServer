@@ -93,7 +93,7 @@ void H4AsyncWebServer::route(void* c,const uint8_t* data,size_t len){
         memcpy(r->_body,data+len-r->_blen,r->_blen);
 //        Serial.printf("SAVING BODY RQ=%p b=%p l=%d\n",r,r->_body,r->_blen);
         if(r->_getHeader(_rqHeaders,"Content-type")=="application/x-www-form-urlencoded") r->_paramsFromstring(std::string ((const char*) r->_body,r->_blen));
-        else Serial.printf("received weird type %s\n",r->_getHeader(_rqHeaders,"Content-type").data());
+        else H4AW_PRINT1("received weird type %s\n",r->_getHeader(_rqHeaders,"Content-type").data());
     }
     //
     H4AW_PRINT1("Handling %p %s %s\n", r, vparts[0].data(), vparts[1].data());
