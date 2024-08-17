@@ -2,7 +2,7 @@
 
 # H4AsyncWebServer
 
-# Asynchronous Webserver for ESP8266, ESP32
+# Asynchronous Webserver for ESP8266, ESP32, and RP2040
 
 Includes robust and *fast* implementations of websockets and server-sent events (SSE)
 
@@ -43,7 +43,7 @@ Licence: ![licence](https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png) Crea
 
 # What does it do?
 
-It's an asynchronous webserver for ESP8266 and ESP32 supporting websockets and SSE, but first let us deal with what it does *not* do...
+It's an asynchronous webserver for ESP8266, ESP32, and RP2040 supporting websockets and SSE, but first let us deal with what it does *not* do...
 
 ***H4AsyncWebServer is NOT a "drop-in" replacement for ESPAsyncWebServer***
 
@@ -87,22 +87,24 @@ Any "missing" feature can be added easily enough if you can make a solid case fo
 
 The library has been tested using the following firmware. Please do not even *think* about raising anhy issues unless you have the following correctly installed.
 
-* [ESP8266 core 3.0.2](https://github.com/esp8266/Arduino)
-* [ESP32 core 2.0.0](https://github.com/espressif/arduino-esp32)
-* [ArduinoIDE 1.8.16](https://www.arduino.cc/en/software)
-
-***N.B.***
-
-Note that PlatformIO is not in the above list. Many folk *do* use it, but you will need to create your own installation configuration.
-I am currently in discussions to add a PIO install to the standard [H4 Installer](https://github.com/philbowles/h4installer). If you are able to help / contribute to this, please get in touch!
+* [ESP8266 core 3.1.2](https://github.com/esp8266/Arduino)
+* [ESP32 core 3.0.4](https://github.com/espressif/arduino-esp32)
+* [RP2040 core 3.9.5](https://github.com/earlephilhower/arduino-pico)
+* [ArduinoIDE 2.3.2](https://www.arduino.cc/en/software)
 
 ---
 
 # Installation
 
-Soon* all H4 libraries will use the [H4 Installer](https://github.com/philbowles/h4installer). This ensures that all versions match and that other additional special functions are included e.g. Addition of optimised board definitions in H4Plugins...
+## PlatformIO
 
-...Until that's ready, install this library manually by downloading the zip file and using the ArduinoIDE to "add zip library". (Luckily, it has no extra tasks that would require the full H4 installer)
+One can get a homogeneous H4 Stack versions from the [PlatformIO H4Plugins Environment](https://github.com/hamzahajeir/h4plugins_env). One can reuse the environment directly, or copy the parts of interest in the configuration file `platformio.ini` in a new project.
+
+## Arduino IDE
+
+Simply download the zip of this repository and install as an Arduino library: `Sketch/Include Library/Add .ZIP Library...`
+
+Soon* all H4 libraries will use the [H4 Installer](https://github.com/philbowles/h4installer). This ensures that all versions match and that other additional special functions are included e.g. Addition of optimised board definitions in H4Plugins...
 
 \* = Don't ask :)
 
