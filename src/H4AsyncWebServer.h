@@ -177,17 +177,17 @@ class H4AW_HTTPHandler {
         virtual bool                _match(const std::string& verb,const std::string& path);
 
     public:
-                H4T_NVP_MAP         _headers; // hoist!
+                int                 _verb;
                 std::string         _path;
+                H4T_NVP_MAP         _headers; // hoist!
                 H4AW_HTTPRequest*   _r=nullptr;
                 H4T_NVP_MAP         _sniffHeader; // thinl: tidy??
                 H4AsyncWebServer*   _srv;
                 bool                _authenticate=true;
-                int                 _verb;
 
         static  H4T_NVP_MAP         mimeTypes;
 
-        H4AW_HTTPHandler(int verb,const std::string& path,bool authenticate=true,H4AW_RQ_HANDLER f=nullptr): _verb(verb),_path(path),_f(f),_authenticate(authenticate){
+        H4AW_HTTPHandler(int verb,const std::string& path,bool authenticate=true,H4AW_RQ_HANDLER f=nullptr): _f(f),_verb(verb),_path(path),_authenticate(authenticate){
             H4AW_PRINT1("H4AW_HTTPHandler CTOR %p v=%d vn=%s p=%s\n",this,_verb,_verbName().data(),path.data());
         }
         virtual ~H4AW_HTTPHandler(){ 
@@ -306,7 +306,7 @@ class H4AsyncWebServer: public H4AsyncServer {
             size_t                  _cacheAge;
             H4AW_HANDLER_LIST       _handlers;
 
-        H4AsyncWebServer(uint16_t port,size_t cacheAge=H4AW_CACHE_AGE): _cacheAge(cacheAge),H4AsyncServer(port){}
+        H4AsyncWebServer(uint16_t port,size_t cacheAge=H4AW_CACHE_AGE): H4AsyncServer(port), _cacheAge(cacheAge){}
         virtual ~H4AsyncWebServer(){}
 
                 void            setFSPath(const std::string & FSPath) { _FSPath = FSPath; }; /* Should start with forward slash "/" */
