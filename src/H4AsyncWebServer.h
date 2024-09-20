@@ -253,7 +253,7 @@ class H4AW_HTTPHandlerSSE: public H4AW_HTTPHandler {
     public:
         H4AW_HTTPHandlerSSE(const std::string& url,size_t backlog=0,bool authenticate=true);
         ~H4AW_HTTPHandlerSSE();
-
+        using H4AW_HTTPHandler::send;
                 void                onChange(H4AW_EVT_HANDLER cb){ _cbConnect=cb; }
                 void                send(const std::string& message, const std::string& event="");
                 size_t              size(){ return _clients.size(); }

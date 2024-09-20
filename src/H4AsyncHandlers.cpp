@@ -197,7 +197,7 @@ void H4AW_HTTPHandler::send(uint16_t code,const std::string& type,size_t length,
             _r->TX(buff,total);
         free(buff);
     } 
-    else H4AW_PRINTF("AAAAAAAAARGH H4AW_HTTPHandler::send zero buff\n");
+    else H4AW_PRINTF("H4AW_HTTPHandler::send zero buff\n");
 }
 /*
 void H4AW_HTTPHandler::sendFileParams(const char* fn,H4T_FN_LOOKUP f){
